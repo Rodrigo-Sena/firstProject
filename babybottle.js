@@ -1,4 +1,5 @@
 const myObstacles = [];
+
 const myGameArea = {
   canvas: document.createElement("canvas"),
   frames: 0,
@@ -18,10 +19,14 @@ const myGameArea = {
 
   },
   score: function() {
-    const points = Math.floor(this.frames / 5);
-    this.context.font = "18px serif";
+    const points = 500 - Math.floor(this.frames / 5);
+    this.context.font = "18px arial";
     this.context.fillStyle = "black";
-    this.context.fillText(`Score: ${points}`, 350, 50);
+    this.context.fillText(`SCORE: ${points}`, 350, 20);
+    return points
+   
+      
+   
   }
 };
 class Component {
@@ -43,6 +48,7 @@ class Component {
   newPos() {
     this.x += this.speedX;
     this.y += this.speedY;
+    
   }
   left() {
     return this.x;
@@ -64,14 +70,6 @@ class Component {
       this.left() > obstacle.right()
     );
   }
-  // crashBaby(baby) {
-  //   return !(
-  //     this.bottom() < baby.top() ||
-  //     this.top() > baby.bottom() ||
-  //     this.right() < baby.left() ||
-  //     this.left() > baby.right()
-  //   );
-  // }
 }
 const player = new Component(30, 30, "red", 0, 450);
 const baby = new Component(30, 30, "blue", 770, 50);
@@ -86,8 +84,10 @@ function updateGameArea() {
   updateObstacles();
   // check if the game should stop
   checkGameOver();
-  // update and draw the score
+  // check if the player wins
+
   myGameArea.score();
+  
 
 
 }
@@ -132,10 +132,30 @@ function updateObstacles() {
 }
 function checkGameOver() {
   const crashed = myObstacles.some(function(obstacle) {
-    return player.crashWith(obstacle);
+    return player.crashWith(obstacle); 
+    
   });
-  if (crashed) {
-    myGameArea.stop();
-    myGameArea.context.fillText('You loose', 350,250)
+  
+  if (crashed || myGameArea.score() === 0)  {
+      myGameArea.stop();
+      // cover score with black rectangle
+      myGameArea.context.fillStyle = 'black' 
+      myGameArea.context.fillRect(345, 3, 120, 20);
+      // game over message
+      myGameArea.context.fillStyle = 'black'
+      myGameArea.context.fillRect(120, 200, 580, 65);
+      myGameArea.context.fillStyle = 'white'
+      myGameArea.context.font = '50px Arial'
+      myGameArea.context.fillText('NO SLEEP TONIGHT! :(', 140, 250)
+   } else if (player.x >= 740 && player.y <= 80) {
+      myGameArea.stop();
+      // you win message
+      myGameArea.context.fillStyle = 'black'
+      myGameArea.context.fillRect(80, 200, 680, 65);
+      myGameArea.context.fillStyle = 'white'
+      myGameArea.context.font = '50px Arial'
+      myGameArea.context.fillText('YOU DESERVE TO SLEEP :)', 95, 250)
   }
+  
+
 }
