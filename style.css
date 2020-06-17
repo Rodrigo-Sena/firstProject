@@ -1,4 +1,33 @@
+body {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  flex-wrap: wrap;
+  background-color: rgb(165, 235, 238);
+}
+
 canvas {
     margin-left: 50px;
-    border: 1px solid black;
+    margin-top: 50px;
+    border: 2px solid black;
+    background-image: image("./images/gameBG.png");
   }
+#start-button {
+  font-weight: 700;
+  background-color: rgb(216, 188, 30);
+  border: 0px;
+  padding: 10px;
+  border-radius: 10px;
+  
+}
+.game-intro{
+  align-self: center;
+  align-items: center;
+  margin-left: 50px;
+  margin-top: 50px;
+
+}
+h1 {
+  color: brown;
+  font-size: medium;
+}
