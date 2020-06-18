@@ -1,16 +1,26 @@
 body {
+  background-color: cornflowerblue;
   display: flex;
   align-items: center;
   text-align: center;
   flex-wrap: wrap;
-  background-color: rgb(165, 235, 238);
+ 
+}
+#canvasDiv{
+background-image: url("./images/gameBG.png");
+background-repeat: no-repeat;
+background-position-x: 50px;
+background-position-y: 50px;
+
+
 }
 
-canvas {
+
+#canvas {
     margin-left: 50px;
     margin-top: 50px;
-    border: 2px solid black;
-    background-image: image("./images/gameBG.png");
+    
+    
   }
 #start-button {
   font-weight: 700;

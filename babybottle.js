@@ -1,22 +1,24 @@
 window.onload = () => {
 const myObstacles = [];
+
 const myImages = ["./images/clock.png","./images/computer.png","./images/diaper.png","./images/dishes.png","./images/dog.png","./images/money.png","./images/whatsapp.png"]
+
 let start = false
 
 
 
 const myGameArea = {
   
-  canvas: document.createElement("canvas"),
+ 
+  canvas: document.getElementById("canvas"),
   
   
   drawRoom: function () {
-    this.canvas.width = 800;
-    this.canvas.height = 500;
     this.context = this.canvas.getContext("2d");
-    document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+    
+   
+    
   },
-
   
   frames: 0,
   start: function() {
@@ -24,36 +26,40 @@ const myGameArea = {
     this.interval = setInterval(updateGameArea, 20);
   },
 
- 
   clear: function() {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    
-    
-
   },
+
   stop: function() {
     clearInterval(this.interval);
   },
   score: function() {
-    const points = 500 - Math.floor(this.frames / 5);
-    this.context.font = "18px Arial";
-    this.context.fillStyle = "black";
-    this.context.fillText(`SCORE: ${points}`, 350, 20);
+    const points = 300 - Math.floor(this.frames / 5);
+    this.context.font = "20px Arial";
+    this.context.fillStyle = "red";
+    this.context.fillText(`SCORE: ${points}`, 333, 42);
     return points
   }
 };
 class Component {
-  constructor(width, height, color, x, y, image) {
+  constructor(width, height, color, x, y) {
     this.width = width;
     this.height = height;
     this.color = color;
     this.x = x;
     this.y = y;
-    this.image = image
+    
     // new speed properties
     this.speedX = 0;
     this.speedY = 0;
   }
+  // createPlayer(){
+  //   const componentImg = new Image();
+  //   componentImg.src = './images/dog.png';   
+  //   myGameArea.context.drawImage(componentImg, 50,50) 
+  // }
+
+
   update() {
     let ctx = myGameArea.context;
     ctx.fillStyle = this.color;
@@ -87,13 +93,16 @@ class Component {
 }
 
 
+
+
 const player = new Component(30, 30, "red", 0, 450);
-const baby = new Component(30, 30, "blue", 770, 50);
+const baby = new Component(30, 30, "blue", 665, 245);
 
 function updateGameArea() {
   
   myGameArea.clear();
   // update the player's position before drawing
+  // player.createPlayer();
   player.newPos();
   player.update();
   baby.newPos();
@@ -107,10 +116,22 @@ function updateGameArea() {
   //drawGameBG()
 
   myGameArea.score();
-  console.log()
+ 
 
 
 }
+
+// GAME SOUNDS
+// BG Music
+const myBGMusic = new Audio()
+myBGMusic.src = "./images/GameSound.mp3"
+
+//Game Over Music
+const myGameOverMusic = new Audio()
+myGameOverMusic.src = "./images/GameOverSound.mp3"
+// Winner Music
+const myWinnerMusic = new Audio()
+myWinnerMusic.src = "./images/WinnerSound.mp3"
 
 // GAME INTRODUCTION IMG
 const roomImg = new Image();
@@ -119,29 +140,22 @@ roomImg.onload = function () {
   myGameArea.context.drawImage(roomImg, 0, 0, 801, 500);
 }
 
-// Background GAME IMG
-function drawGameBG (){
-  const roomImg = new Image();
-  roomImg.src = './images/gameBG.png';   
-  roomImg.onload = function () {
-  myGameArea.context.drawImage(roomImg, 0, 0, 801, 500);
- }
-}
 
 function gameOverImg(){
   const roomImg = new Image();
   roomImg.src = './images/looserBG.png';   
   roomImg.onload = function () {
   myGameArea.context.drawImage(roomImg, 0, 0, 801, 500);
+  m
   }
 }
-
 
 function winnerImg(){
   const roomImg = new Image();
   roomImg.src = './images/winnerBG.png';   
   roomImg.onload = function () {
   myGameArea.context.drawImage(roomImg, 0, 0, 801, 500);
+  myGameArea.score()
   }
 }
 
@@ -151,6 +165,7 @@ myGameArea.drawRoom()
 document.getElementById('start-button').onclick = () => {
 if (!start){
   myGameArea.start();
+  myBGMusic.play()
   start = true;
   document.getElementById('start-button').innerText = "RESET GAME"
   } else {
@@ -190,12 +205,16 @@ function updateObstacles() {
   if (myGameArea.frames % 8 === 0) {
   
     let minWidth = 80;
-    let maxWidth = 720;
+    let maxWidth = 870;
     let x = Math.floor(
       Math.random() * (maxWidth - minWidth + 1) + minWidth)
+    
+    const componentImg = new Image();
+    componentImg.src = './images/dog.png';   
+     
 
     
-    myObstacles.push(new Component(30, 30, "green", x, 10));
+    myObstacles.push(new Component(30, 30, componentImg, x, 10));
   }
 }
 function checkGameOver() {
@@ -205,11 +224,17 @@ function checkGameOver() {
   
   if (crashed || myGameArea.score() === 0)  {
       myGameArea.stop();
-      setInterval(gameOverImg, 500)
-  } else if (player.x >= 740 && player.y <= 80) {
+      myBGMusic.pause();
+      setInterval(myGameOverMusic.play(), 1000);
+      setInterval(gameOverImg, 500);
+      
+  } else if (player.x >= 640 && player.y <= 270) {
       myGameArea.stop();
-      setInterval(winnerImg, 500)
-      //setInterval(), 1100)
+      myBGMusic.pause();
+      setInterval(winnerImg, 500);
+      setInterval(myWinnerMusic.play(),1000);
+      
+      
   }
   
 
