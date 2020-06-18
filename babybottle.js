@@ -1,23 +1,16 @@
 window.onload = () => {
-const myObstacles = [];
 
-const myImages = ["./images/clock.png","./images/computer.png","./images/diaper.png","./images/dishes.png","./images/dog.png","./images/money.png","./images/whatsapp.png"]
-
-let start = false
+  const myObstacles = [];
+  const myImages = ["./images/clock.png","./images/computer.png","./images/diaper.png","./images/dishes.png","./images/dog.png","./images/money.png","./images/whatsapp.png"]
+  let start = false
 
 
 
 const myGameArea = {
-  
- 
   canvas: document.getElementById("canvas"),
-  
   
   drawRoom: function () {
     this.context = this.canvas.getContext("2d");
-    
-   
-    
   },
   
   frames: 0,
@@ -40,6 +33,8 @@ const myGameArea = {
     this.context.fillText(`SCORE: ${points}`, 333, 42);
     return points
   }
+
+  // ***************** COMPONENT CONSTRUCTOR *****************
 };
 class Component {
   constructor(width, height, color, x, y) {
@@ -48,18 +43,10 @@ class Component {
     this.color = color;
     this.x = x;
     this.y = y;
-    
-    // new speed properties
     this.speedX = 0;
     this.speedY = 0;
   }
-  // createPlayer(){
-  //   const componentImg = new Image();
-  //   componentImg.src = './images/dog.png';   
-  //   myGameArea.context.drawImage(componentImg, 50,50) 
-  // }
-
-
+  
   update() {
     let ctx = myGameArea.context;
     ctx.fillStyle = this.color;
@@ -92,36 +79,23 @@ class Component {
   }
 }
 
-
-
-
 const player = new Component(30, 30, "red", 0, 450);
-const baby = new Component(30, 30, "blue", 665, 245);
 
 function updateGameArea() {
-  
   myGameArea.clear();
   // update the player's position before drawing
-  // player.createPlayer();
   player.newPos();
   player.update();
-  baby.newPos();
-  baby.update();
   // update the obstacles array
- 
   updateObstacles();
   // check if the game should stop
   checkGameOver();
-  
   //drawGameBG()
-
   myGameArea.score();
- 
-
-
 }
 
-// GAME SOUNDS
+// ************ GAME SOUNDS ********************
+
 // BG Music
 const myBGMusic = new Audio()
 myBGMusic.src = "./images/GameSound.mp3"
@@ -133,13 +107,14 @@ myGameOverMusic.src = "./images/GameOverSound.mp3"
 const myWinnerMusic = new Audio()
 myWinnerMusic.src = "./images/WinnerSound.mp3"
 
-// GAME INTRODUCTION IMG
+// **************** GAME IMAGES *****************
+
+// Opening image
 const roomImg = new Image();
 roomImg.src = './images/preGameBG.png';   
-roomImg.onload = function () {
-  myGameArea.context.drawImage(roomImg, 0, 0, 801, 500);
+roomImg.onload = function () { 
+myGameArea.context.drawImage(roomImg, 0, 0, 801, 500);
 }
-
 
 function gameOverImg(){
   const roomImg = new Image();
@@ -159,19 +134,22 @@ function winnerImg(){
   }
 }
 
+
 myGameArea.drawRoom()
 
+
+
 // BOTÃO START
+
 document.getElementById('start-button').onclick = () => {
-if (!start){
-  myGameArea.start();
-  myBGMusic.play()
-  start = true;
-  document.getElementById('start-button').innerText = "RESET GAME"
-  } else {
-  window.location.reload()
-}
-  
+  if (!start){
+    myGameArea.start();
+    myBGMusic.play()
+    start = true;
+    document.getElementById('start-button').innerText = "RESET GAME"
+    } else {
+    window.location.reload()
+  }
 }
 
 document.onkeydown = function(e) {
@@ -190,16 +168,18 @@ document.onkeydown = function(e) {
       break;
   }
 };
+
 document.onkeyup = function(e) {
   player.speedX = 0;
   player.speedY = 0;
 };
+
 function updateObstacles() {
   for (i = 0; i < myObstacles.length; i++) {
     myObstacles[i].y += +5;
     myObstacles[i].update();
-
   }
+
   myGameArea.frames += 1;
 
   if (myGameArea.frames % 8 === 0) {
@@ -209,34 +189,31 @@ function updateObstacles() {
     let x = Math.floor(
       Math.random() * (maxWidth - minWidth + 1) + minWidth)
     
-    const componentImg = new Image();
-    componentImg.src = './images/dog.png';   
-     
-
+    // const componentImg = new Image();
+    // componentImg.src = './images/dog.png';   
     
-    myObstacles.push(new Component(30, 30, componentImg, x, 10));
+    myObstacles.push(new Component(30, 30, "black", x, 10));
   }
 }
+
+// **************** GAME OVER / WIN **********************
+
 function checkGameOver() {
   const crashed = myObstacles.some(function(obstacle) {
-    return player.crashWith(obstacle); 
+  return player.crashWith(obstacle); 
   });
-  
-  if (crashed || myGameArea.score() === 0)  {
+  // Game Over
+    if (crashed || myGameArea.score() === 0)  {
       myGameArea.stop();
       myBGMusic.pause();
       setInterval(myGameOverMusic.play(), 1000);
       setInterval(gameOverImg, 500);
-      
-  } else if (player.x >= 640 && player.y <= 270) {
+  // Game Win
+    } else if (player.x >= 640 && player.y <= 270) {
       myGameArea.stop();
       myBGMusic.pause();
       setInterval(winnerImg, 500);
       setInterval(myWinnerMusic.play(),1000);
-      
-      
+    }
   }
-  
-
-}
 }
