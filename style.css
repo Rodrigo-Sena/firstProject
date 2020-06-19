@@ -3,9 +3,18 @@ body {
   display: flex;
   align-items: center;
   text-align: center;
-  flex-wrap: wrap;
+ 
  
 }
+
+#video {
+size: ;
+vertical-align: inherit;
+margin-top: 50px;
+margin-left: 50px;
+margin-right: -850px;
+}
+
 #canvasDiv{
 background-image: url("./images/gameBG.png");
 background-repeat: no-repeat;

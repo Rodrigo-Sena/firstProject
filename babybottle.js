@@ -146,7 +146,7 @@ function winnerImg(){
 }
 
 
-myGameArea.drawRoom() // CALL THE INTRO IMAGE
+myGameArea.drawRoom()
 
 
 // BOTÃO START
