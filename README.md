@@ -1,5 +1,5 @@
 # firstProject Baby Bottle Game
-*Quidditch Practice* is a game built in HTML, CSS, canvas and JavaScript.
+It is a game built in HTML, CSS, canvas and JavaScript.
 
 > Click [HERE](https://rodrigo-sena.github.io/firstProject/) to play!
 
