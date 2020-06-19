@@ -26,7 +26,7 @@ const myGameArea = {
     clearInterval(this.interval);
   },
   score: function() {
-    const points = 300 - Math.floor(this.frames / 5);
+    const points = 400 - Math.floor(this.frames / 5);
     this.context.font = "20px Arial";
     this.context.fillStyle = "red";
     this.context.fillText(`SCORE: ${points}`, 333, 42);
@@ -202,6 +202,7 @@ function updateObstacles() {
       Math.random() * (maxWidth - minWidth + 1) + minWidth)
 
     let img = myImages[Math.floor(Math.random() * (myImages.length))]
+    console.log(img)
     
   
     myObstacles.push(new Component(30, 30, img, x, 10));
