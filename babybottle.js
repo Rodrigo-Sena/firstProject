@@ -15,7 +15,6 @@ const myGameArea = {
   
   frames: 0,
   start: function() {
-    // call updateGameArea() every 20 milliseconds
     this.interval = setInterval(updateGameArea, 20);
   },
 
@@ -37,21 +36,31 @@ const myGameArea = {
   // ***************** COMPONENT CONSTRUCTOR *****************
 };
 class Component {
-  constructor(width, height, color, x, y) {
+  constructor(width, height, color, x, y, isBottle = false) {
     this.width = width;
     this.height = height;
     this.color = color;
     this.x = x;
     this.y = y;
+    this.isBottle = isBottle;
     this.speedX = 0;
     this.speedY = 0;
   }
   
+
+
   update() {
     let ctx = myGameArea.context;
-    ctx.fillStyle = this.color;
-    ctx.fillRect(this.x, this.y, this.width, this.height);
-    
+    if (this.isBottle) {
+      const bottleImg = new Image();
+      bottleImg.src = './images/bottle.png';
+      ctx.drawImage(bottleImg, this.x, this.y, 80, 40);
+    } else {
+      const obstacleImg = new Image();
+      obstacleImg.src = this.color
+      console.log(obstacleImg.src)
+      ctx.drawImage(obstacleImg, this.x, this.y, 70, 70);
+    }
   }
   newPos() {
     this.x += this.speedX;
@@ -79,7 +88,8 @@ class Component {
   }
 }
 
-const player = new Component(30, 30, "red", 0, 450);
+const player = new Component(80, 40, "red", 0, 450, true);
+
 
 function updateGameArea() {
   myGameArea.clear();
@@ -114,6 +124,7 @@ const roomImg = new Image();
 roomImg.src = './images/preGameBG.png';   
 roomImg.onload = function () { 
 myGameArea.context.drawImage(roomImg, 0, 0, 801, 500);
+
 }
 
 function gameOverImg(){
@@ -135,8 +146,7 @@ function winnerImg(){
 }
 
 
-myGameArea.drawRoom()
-
+myGameArea.drawRoom() // CALL THE INTRO IMAGE
 
 
 // BOTÃO START
@@ -174,6 +184,8 @@ document.onkeyup = function(e) {
   player.speedY = 0;
 };
 
+// ***************** OBSTACLES **********************
+
 function updateObstacles() {
   for (i = 0; i < myObstacles.length; i++) {
     myObstacles[i].y += +5;
@@ -182,17 +194,17 @@ function updateObstacles() {
 
   myGameArea.frames += 1;
 
-  if (myGameArea.frames % 8 === 0) {
+  if (myGameArea.frames % 12 === 0) {
   
     let minWidth = 80;
     let maxWidth = 870;
     let x = Math.floor(
       Math.random() * (maxWidth - minWidth + 1) + minWidth)
+
+    let img = myImages[Math.floor(Math.random() * (myImages.length))]
     
-    // const componentImg = new Image();
-    // componentImg.src = './images/dog.png';   
-    
-    myObstacles.push(new Component(30, 30, "black", x, 10));
+  
+    myObstacles.push(new Component(30, 30, img, x, 10));
   }
 }
 
@@ -209,7 +221,7 @@ function checkGameOver() {
       setInterval(myGameOverMusic.play(), 1000);
       setInterval(gameOverImg, 500);
   // Game Win
-    } else if (player.x >= 640 && player.y <= 270) {
+    } else if (player.x >= 600 && player.y <= 285) {
       myGameArea.stop();
       myBGMusic.pause();
       setInterval(winnerImg, 500);
