@@ -106,6 +106,11 @@ function updateGameArea() {
 
 // ************ GAME SOUNDS ********************
 
+// crash sound
+
+const crashSound = new Audio()
+crashSound.src = "./images/crashSound.mp3"
+
 // BG Music
 const myBGMusic = new Audio()
 myBGMusic.src = "./images/GameSound.mp3"
@@ -218,6 +223,7 @@ function checkGameOver() {
   // Game Over
     if (crashed || myGameArea.score() === 0)  {
       myGameArea.stop();
+      crashSound.play()
       myBGMusic.pause();
       setInterval(myGameOverMusic.play(), 1000);
       setInterval(gameOverImg, 500);
